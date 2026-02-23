@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>С 8 Марта!</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@300;400;600&display=swap"
+    rel="stylesheet">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    if (window.Telegram && window.Telegram.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
+      tg.setHeaderColor('#fff5f8');
+    }
+  </script>
+</head>
+
+<body>
+  <div class="background-decor">
+    <div class="petal p1"></div>
+    <div class="petal p2"></div>
+    <div class="petal p3"></div>
+    <div class="petal p4"></div>
+  </div>
+
+  <div class="container">
+    <div class="envelope-wrapper" id="envelope">
+      <div class="envelope">
+        <div class="flap"></div>
+        <div class="pocket"></div>
+        <div class="letter">
+          <div class="letter-content">
+            <h1>С 8 Марта! 🌷</h1>
+            <p>Пусть этот весенний день наполнит твое сердце теплом, нежностью и радостью. Ты вдохновляешь и делаешь
+              этот мир прекраснее!</p>
+            <p class="signature">С любовью...</p>
+          </div>
+        </div>
+      </div>
+      <div class="instruction">Нажми, чтобы открыть</div>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+
+</html>
