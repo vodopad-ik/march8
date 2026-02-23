@@ -94,16 +94,28 @@ body {
 /* Конверт */
 .container {
     perspective: 1000px;
+    z-index: 10;
 }
 
 .envelope-wrapper {
     position: relative;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: transform 0.1s ease-out;
+    /* Ускоряем для параллакса */
+    transform-style: preserve-3d;
+    animation: float 4s ease-in-out infinite;
 }
 
-.envelope-wrapper:hover {
-    transform: translateY(-5px);
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(1deg);
+    }
 }
 
 .envelope {
@@ -113,6 +125,7 @@ body {
     background: var(--envelope-color);
     border-radius: 0 0 10px 10px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transform-style: preserve-3d;
 }
 
 .flap {
