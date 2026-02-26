@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор Поздравлений</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #fff5f8;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #d81b60;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .result {
+            margin-top: 25px;
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            word-break: break-all;
+            font-size: 13px;
+            border: 1px dashed #ccc;
+        }
+
+        button {
+            background: #ff8fb1;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #f06292;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>🎁 Генератор ссылок для открыток</h1>
+
+        <label>Базовая ссылка на твой сайт:</label>
+        <input type="text" id="baseUrl" value="https://vodopad-ik.github.io/march8/"
+            placeholder="Вставь ссылку на GitHub Pages">
+
+        <label>Имя девушки:</label>
+        <input type="text" id="name" placeholder="Например: Катя">
+
+        <label>Текст поздравления:</label>
+        <textarea id="text" rows="3" placeholder="Оставь пустым, чтобы был стандартный текст"></textarea>
+
+        <label>Имя файла фото (в папке /photos):</label>
+        <input type="text" id="photo" placeholder="Например: kate.jpg">
+
+        <button onclick="generateLink()">Сгенерировать ссылку</button>
+
+        <div class="result" id="resultContainer" style="display:none;">
+            <strong>Твоя ссылка для Telegram:</strong>
+            <div id="finalLink" style="margin-top:10px; color: #d81b60;"></div>
+            <button onclick="copyLink()" style="margin-top:10px; font-size: 12px; padding: 8px;">Копировать
+                ссылку</button>
+        </div>
+    </div>
+
+    <script>
+        function generateLink() {
+            let base = document.getElementById('baseUrl').value;
+            if (!base.endsWith('/')) base += '/';
+
+            const name = document.getElementById('name').value;
+            const text = document.getElementById('text').value;
+            const photo = document.getElementById('photo').value;
+
+            const url = new URL(base);
+            if (name) url.searchParams.set('name', name);
+            if (text) url.searchParams.set('text', text);
+            if (photo) url.searchParams.set('photo', photo);
+
+            // GitHub Pages иногда требует index.html в пути для параметров
+            let finalUrl = url.toString().replace('?', 'index.html?');
+
+            document.getElementById('resultContainer').style.display = 'block';
+            document.getElementById('finalLink').innerText = finalUrl;
+        }
+
+        function copyLink() {
+            const link = document.getElementById('finalLink').innerText;
+            navigator.clipboard.writeText(link);
+            alert('Ссылка скопирована!');
+        }
+    </script>
+</body>
+
+</html>
