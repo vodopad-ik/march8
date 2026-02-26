@@ -8,12 +8,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const openSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
     openSound.volume = 0.5;
 
+    let hasFiredSalute = false;
+
     envelope.addEventListener('click', () => {
         const isOpen = envelope.classList.contains('open');
         envelope.classList.toggle('open');
 
         if (!isOpen) {
             openSound.play().catch(e => console.log('Audio play failed:', e));
+
+            // Запуск салюта при первом открытии
+            if (!hasFiredSalute && window.confetti) {
+                const count = 200;
+                const defaults = {
+                    origin: { y: 0.7 },
+                    zIndex: 1000,
+                    colors: ['#6a1b9a', '#8e24aa', '#ab47bc', '#ce93d8', '#f8bbd0'] // Фиолетовый градиент
+                };
+
+                function fire(particleRatio, opts) {
+                    confetti(Object.assign({}, defaults, opts, {
+                        particleCount: Math.floor(count * particleRatio)
+                    }));
+                }
+
+                fire(0.25, { spread: 26, startVelocity: 55 });
+                fire(0.2, { spread: 60 });
+                fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+                fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+                fire(0.1, { spread: 120, startVelocity: 45 });
+
+                hasFiredSalute = true;
+            }
         }
 
         if (window.navigator.vibrate) {
