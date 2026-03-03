@@ -114,10 +114,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- ДИНАМИЧЕСКИЙ ТЕКСТ (УНИКАЛИЗАЦИЯ) ---
+    let name = '';
+    let text = '';
+    let photo = '';
+
+    // 1. Пытаемся взять данные из URL (для обычного браузера)
     const params = new URLSearchParams(window.location.search);
-    const name = params.get('name') || '';
-    const text = params.get('text');
-    const photo = params.get('photo');
+    name = params.get('name') || '';
+    text = params.get('text');
+    photo = params.get('photo');
+
+    // 2. Пытаемся взять данные из Telegram start_param (для бота)
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.start_param) {
+        try {
+            // Декодируем из Base64 (Телеграм передает данные через startapp именно так для надежности)
+            const decodedData = atob(window.Telegram.WebApp.initDataUnsafe.start_param);
+            const tgParams = new URLSearchParams(decodedData);
+
+            if (tgParams.get('name')) name = tgParams.get('name');
+            if (tgParams.get('text')) text = tgParams.get('text');
+            if (tgParams.get('photo')) photo = tgParams.get('photo');
+        } catch (e) {
+            console.error('Ошибка декодирования Telegram data:', e);
+        }
+    }
 
     if (name) {
         document.getElementById('user-name').innerText = name;
