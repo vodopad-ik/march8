@@ -40,15 +40,17 @@ document.addEventListener('DOMContentLoaded', () => {
         envelope.classList.toggle('open');
 
         if (!isOpen) {
-            // Звук открытия с задержкой 400мс
+            // Звук открытия с задержкой 300мс, чтобы совпало с движением клапана
             setTimeout(() => {
                 playSfx('open');
-            }, 400);
+            }, 485);
 
             // Запуск салюта при первом открытии
             if (!hasFiredSalute && window.confetti) {
-                // Мгновенный звук салюта
-                playSfx('firework');
+                // Звук салюта с задержкой, чтобы совпало с вылетом конфетти
+                setTimeout(() => {
+                    playSfx('firework');
+                }, 60);
 
                 const count = 200;
                 const defaults = {

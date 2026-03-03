@@ -7,7 +7,11 @@
     --accent: #d81b60;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     height: 100vh;
@@ -26,8 +30,10 @@ body {
 
 .envelope-wrapper {
     position: relative;
-    width: 320px;
-    height: 220px;
+    width: 380px;
+    /* increased width */
+    height: 260px;
+    /* increased height */
     transition: transform 0.5s ease;
 }
 
@@ -43,7 +49,7 @@ body {
     inset: 0;
     background-color: var(--env-dark);
     border-radius: 0 0 10px 10px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
     z-index: 1;
 }
 
@@ -51,19 +57,23 @@ body {
 .letter {
     position: absolute;
     bottom: 5px;
-    left: 10px;
-    width: 300px;
-    height: 190px;
+    left: 20px;
+    width: 340px;
+    /* increased width */
+    height: 230px;
+    /* increased height */
     background: var(--paper);
     border-radius: 5px;
     padding: 15px;
     z-index: 2;
-    transition: transform 0.5s ease 0s; /* Возврат (закрытие) происходит сразу */
+    transition: transform 0.5s ease 0s;
+    /* Возврат (закрытие) происходит сразу */
 }
 
 .envelope-wrapper.open .letter {
-    transform: translateY(-130px);
-    transition: transform 0.5s ease 0.4s; /* Выезд письма ждет пока откроется клапан (0.4с) */
+    transform: translateY(-190px);
+    transition: transform 0.5s ease 0.4s;
+    /* Выезд письма ждет пока откроется клапан (0.4с) */
 }
 
 /* 3. Передний карман (состоит из бордеров для формы конверта) */
@@ -71,51 +81,61 @@ body {
     position: absolute;
     inset: 0;
     z-index: 3;
-    pointer-events: none; /* Чтобы клики проходили на конверт */
+    pointer-events: none;
+    /* Чтобы клики проходили на конверт */
 }
 
 .front-pocket::before {
     content: '';
     position: absolute;
-    bottom: 0; left: 0;
-    width: 0; height: 0;
-    border-left: 160px solid var(--env-light);
-    border-right: 160px solid var(--env-light);
-    border-bottom: 110px solid var(--env-main);
-    border-top: 110px solid transparent;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 190px solid var(--env-light);
+    border-right: 190px solid var(--env-light);
+    border-bottom: 130px solid var(--env-main);
+    border-top: 130px solid transparent;
     border-radius: 0 0 10px 10px;
 }
 
 .front-pocket::after {
     content: '';
     position: absolute;
-    bottom: 0; left: 0;
-    width: 0; height: 0;
-    border-left: 160px solid var(--env-main);
-    border-right: 160px solid var(--env-main);
-    border-bottom: 110px solid transparent;
-    border-top: 110px solid transparent;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 190px solid var(--env-main);
+    border-right: 190px solid var(--env-main);
+    border-bottom: 130px solid transparent;
+    border-top: 130px solid transparent;
     border-radius: 0 0 10px 10px;
 }
 
 /* 4. Верхний клапан (открывается) */
 .top-flap {
     position: absolute;
-    top: 0; left: 0;
-    width: 0; height: 0;
-    border-left: 160px solid transparent;
-    border-right: 160px solid transparent;
-    border-top: 120px solid var(--env-dark);
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 190px solid transparent;
+    border-right: 190px solid transparent;
+    border-top: 140px solid var(--env-dark);
     border-radius: 10px 10px 0 0;
     transform-origin: top;
     z-index: 4;
-    transition: transform 0.4s ease 0.5s, z-index 0s 0.5s; /* При закрытии ждет пока заедет письмо */
+    transition: transform 0.4s ease 0.5s, z-index 0s 0.5s;
+    /* При закрытии ждет пока заедет письмо */
 }
 
 .envelope-wrapper.open .top-flap {
     transform: rotateX(180deg);
-    z-index: 1; /* Уходит назад, чтобы письмо выехало ПОВЕРХ клапана */
-    transition: transform 0.4s ease 0s, z-index 0s 0.2s; /* Открывается сразу, z-index меняется посередине анимации */
+    z-index: 1;
+    /* Уходит назад, чтобы письмо выехало ПОВЕРХ клапана */
+    transition: transform 0.4s ease 0s, z-index 0s 0.2s;
+    /* Открывается сразу, z-index меняется посередине анимации */
 }
 
 /* Контент письма */
@@ -125,20 +145,78 @@ body {
     align-items: center;
     text-align: center;
 }
+
 .photo-container {
-    width: 60px; height: 60px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background-size: cover;
     margin-bottom: 10px;
     border: 2px solid var(--env-light);
     display: none;
 }
-.letter-content h1 { font-family: 'Marck Script', cursive; color: var(--accent); font-size: 20px; }
-.letter-content p { font-size: 13px; line-height: 1.4; color: #444; margin-top: 5px; }
+
+.letter-content h1 {
+    font-family: 'Marck Script', cursive;
+    color: var(--accent);
+    font-size: 20px;
+}
+
+.letter-content p {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #444;
+    margin-top: 5px;
+}
 
 /* Фоновый декор и инструкция */
-.background-decor { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
-.petal { position: absolute; background: radial-gradient(circle at 30% 30%, #ffc1e3, #ff8fb1); border-radius: 50% 0 50% 50%; opacity: 0.6; animation: fall linear infinite; }
-@keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
-.instruction { text-align: center; margin-top: 40px; color: var(--env-dark); font-size: 14px; animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+.background-decor {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.petal {
+    position: absolute;
+    background: radial-gradient(circle at 30% 30%, #ffc1e3, #ff8fb1);
+    border-radius: 50% 0 50% 50%;
+    opacity: 0.6;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.instruction {
+    text-align: center;
+    margin-top: 40px;
+    color: var(--env-dark);
+    font-size: 14px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}

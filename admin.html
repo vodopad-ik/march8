@@ -104,20 +104,22 @@
 
     <script>
         function generateLink() {
-            let base = document.getElementById('baseUrl').value;
+            let base = document.getElementById('baseUrl').value.trim();
             if (!base.endsWith('/')) base += '/';
 
             const name = document.getElementById('name').value;
             const text = document.getElementById('text').value;
             const photo = document.getElementById('photo').value;
 
+            // Build URL object for proper encoding
             const url = new URL(base);
             if (name) url.searchParams.set('name', name);
             if (text) url.searchParams.set('text', text);
             if (photo) url.searchParams.set('photo', photo);
 
-            // GitHub Pages иногда требует index.html в пути для параметров
-            let finalUrl = url.toString().replace('?', 'index.html?');
+            // Ensure we point to index.html of the site and add a cache‑busting timestamp
+            const timestamp = Date.now();
+            const finalUrl = `${url.origin}${url.pathname}index.html?${url.searchParams.toString()}&v=${timestamp}`;
 
             document.getElementById('resultContainer').style.display = 'block';
             document.getElementById('finalLink').innerText = finalUrl;
