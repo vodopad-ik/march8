@@ -115,9 +115,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ДИНАМИЧЕСКИЙ ТЕКСТ (УНИКАЛИЗАЦИЯ) ---
     const params = new URLSearchParams(window.location.search);
-    const name = params.get('name') || '';
-    const text = params.get('text');
-    const photo = params.get('photo');
+
+    // Поддержка Telegram startapp параметров
+    let tgParams = {};
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.start_param) {
+        const startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
+        // Предполагаем формат key1_val1-key2_val2
+        startParam.split('-').forEach(p => {
+            const [key, val] = p.split('_');
+            if (key && val) tgParams[key] = decodeURIComponent(val);
+        });
+    }
+
+    const name = tgParams.name || params.get('name') || '';
+    const text = tgParams.text || params.get('text');
+    const photo = tgParams.photo || params.get('photo');
 
     if (name) {
         document.getElementById('user-name').innerText = name;
