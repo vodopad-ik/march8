@@ -1,17 +1,13 @@
 :root {
-    --bg-color: #fff5f8;
-    --envelope-color: #ff8fb1;
-    --envelope-dark: #f06292;
-    --paper-color: #ffffff;
-    --text-color: #4a4a4a;
-    --accent-color: #d81b60;
+    --bg-color: #fdf2f5;
+    --env-main: #ff8fb1;
+    --env-dark: #ec407a;
+    --env-light: #ffacc7;
+    --paper: #ffffff;
+    --accent: #d81b60;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     height: 100vh;
@@ -23,264 +19,126 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* Фоновый декор */
-.background-decor {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    pointer-events: none;
-}
-
-.petal {
-    position: absolute;
-    background: radial-gradient(circle at 30% 30%, #ffc1e3, #ff8fb1);
-    width: 20px;
-    height: 30px;
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    opacity: 0.6;
-    animation: fall linear infinite;
-}
-
-@keyframes fall {
-    0% {
-        transform: translateY(-10vh) rotate(0deg);
-        opacity: 0;
-    }
-
-    10% {
-        opacity: 0.8;
-    }
-
-    100% {
-        transform: translateY(110vh) rotate(360deg);
-        opacity: 0;
-    }
-}
-
-.p1 {
-    left: 10%;
-    width: 25px;
-    height: 35px;
-    animation-duration: 7s;
-}
-
-.p2 {
-    left: 30%;
-    width: 15px;
-    height: 25px;
-    animation-duration: 10s;
-    animation-delay: 2s;
-}
-
-.p3 {
-    left: 70%;
-    width: 20px;
-    height: 30px;
-    animation-duration: 8s;
-    animation-delay: 1s;
-}
-
-.p4 {
-    left: 90%;
-    width: 18px;
-    height: 28px;
-    animation-duration: 12s;
-    animation-delay: 4s;
-}
-
-/* Конверт */
+/* 3D Сцена */
 .container {
-    perspective: 1000px;
-    z-index: 10;
+    perspective: 1200px;
 }
 
 .envelope-wrapper {
     position: relative;
-    cursor: pointer;
-    transition: transform 0.1s ease-out;
-    /* Ускоряем для параллакса */
-    transform-style: preserve-3d;
-    animation: float 4s ease-in-out infinite;
-}
-
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0) rotate(0);
-    }
-
-    50% {
-        transform: translateY(-10px) rotate(1deg);
-    }
+    width: 320px;
+    height: 220px;
+    transition: transform 0.5s ease;
 }
 
 .envelope {
     position: relative;
-    width: 300px;
-    height: 200px;
-    background: var(--envelope-color);
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-    transform-style: preserve-3d;
+    width: 100%;
+    height: 100%;
 }
 
-.flap {
+/* 1. Задняя стенка конверта */
+.back-space {
     position: absolute;
-    top: 0;
-    width: 0;
-    height: 0;
-    border-left: 150px solid transparent;
-    border-right: 150px solid transparent;
-    border-top: 110px solid var(--envelope-dark);
-    border-radius: 10px 10px 0 0;
-    transform-origin: top;
-    transition: transform 0.5s ease;
-    z-index: 3;
-}
-
-.pocket {
-    position: absolute;
-    bottom: 0;
-    width: 300px;
-    height: 200px;
-    background: var(--envelope-color);
+    inset: 0;
+    background-color: var(--env-dark);
     border-radius: 0 0 10px 10px;
-    z-index: 2;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    z-index: 1;
 }
 
-.pocket::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    width: 0;
-    height: 0;
-    border-left: 150px solid transparent;
-    border-right: 150px solid transparent;
-    border-bottom: 100px solid #f8bbd0;
-    border-radius: 0 0 10px 10px;
-}
-
+/* 2. Письмо (внутри) */
 .letter {
     position: absolute;
-    bottom: 10px;
+    bottom: 5px;
     left: 10px;
-    width: 280px;
-    height: 180px;
-    background: var(--paper-color);
+    width: 300px;
+    height: 190px;
+    background: var(--paper);
     border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.6s ease, bottom 0.6s ease;
-    z-index: 1;
-    overflow: hidden;
+    padding: 15px;
+    z-index: 2;
+    transition: transform 0.5s ease 0s; /* Возврат (закрытие) происходит сразу */
 }
 
+.envelope-wrapper.open .letter {
+    transform: translateY(-130px);
+    transition: transform 0.5s ease 0.4s; /* Выезд письма ждет пока откроется клапан (0.4с) */
+}
+
+/* 3. Передний карман (состоит из бордеров для формы конверта) */
+.front-pocket {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none; /* Чтобы клики проходили на конверт */
+}
+
+.front-pocket::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 0;
+    border-left: 160px solid var(--env-light);
+    border-right: 160px solid var(--env-light);
+    border-bottom: 110px solid var(--env-main);
+    border-top: 110px solid transparent;
+    border-radius: 0 0 10px 10px;
+}
+
+.front-pocket::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 0;
+    border-left: 160px solid var(--env-main);
+    border-right: 160px solid var(--env-main);
+    border-bottom: 110px solid transparent;
+    border-top: 110px solid transparent;
+    border-radius: 0 0 10px 10px;
+}
+
+/* 4. Верхний клапан (открывается) */
+.top-flap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 0; height: 0;
+    border-left: 160px solid transparent;
+    border-right: 160px solid transparent;
+    border-top: 120px solid var(--env-dark);
+    border-radius: 10px 10px 0 0;
+    transform-origin: top;
+    z-index: 4;
+    transition: transform 0.4s ease 0.5s, z-index 0s 0.5s; /* При закрытии ждет пока заедет письмо */
+}
+
+.envelope-wrapper.open .top-flap {
+    transform: rotateX(180deg);
+    z-index: 1; /* Уходит назад, чтобы письмо выехало ПОВЕРХ клапана */
+    transition: transform 0.4s ease 0s, z-index 0s 0.2s; /* Открывается сразу, z-index меняется посередине анимации */
+}
+
+/* Контент письма */
 .letter-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    opacity: 0;
-    transition: opacity 0.4s ease 0.4s;
 }
-
 .photo-container {
-    width: 80px;
-    height: 80px;
+    width: 60px; height: 60px;
     border-radius: 50%;
     background-size: cover;
-    background-position: center;
-    margin-bottom: 5px;
-    border: 3px solid #f8bbd0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    border: 2px solid var(--env-light);
     display: none;
-    /* Скрываем, если фото нет */
 }
+.letter-content h1 { font-family: 'Marck Script', cursive; color: var(--accent); font-size: 20px; }
+.letter-content p { font-size: 13px; line-height: 1.4; color: #444; margin-top: 5px; }
 
-.letter-content h1 {
-    font-family: 'Marck Script', cursive;
-    color: var(--accent-color);
-    font-size: 22px;
-    margin-bottom: 5px;
-}
-
-.letter-content p {
-    font-size: 13px;
-    line-height: 1.4;
-    color: var(--text-color);
-    margin: 5px 0;
-}
-
-.signature {
-    font-family: 'Marck Script', cursive;
-    font-size: 18px;
-    color: var(--accent-color);
-    margin-top: 15px;
-}
-
-/* Анимация открытия */
-.envelope-wrapper.open .flap {
-    transform: rotateX(180deg);
-    z-index: 0;
-}
-
-.envelope-wrapper.open .letter {
-    bottom: 100px;
-    height: 250px;
-    transform: translateY(-50px);
-    z-index: 4;
-}
-
-.envelope-wrapper.open .letter-content {
-    opacity: 1;
-}
-
-.instruction {
-    text-align: center;
-    margin-top: 30px;
-    color: var(--envelope-dark);
-    font-size: 14px;
-    font-weight: 300;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        opacity: 0.5;
-    }
-
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0.5;
-    }
-}
-
-@media (max-width: 400px) {
-    .envelope {
-        width: 260px;
-        height: 180px;
-    }
-
-    .flap {
-        border-left-width: 130px;
-        border-right-width: 130px;
-        border-top-width: 100px;
-    }
-
-    .letter {
-        width: 240px;
-        height: 160px;
-    }
-
-    .pocket {
-        width: 260px;
-        height: 180px;
-    }
-}
+/* Фоновый декор и инструкция */
+.background-decor { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+.petal { position: absolute; background: radial-gradient(circle at 30% 30%, #ffc1e3, #ff8fb1); border-radius: 50% 0 50% 50%; opacity: 0.6; animation: fall linear infinite; }
+@keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+.instruction { text-align: center; margin-top: 40px; color: var(--env-dark); font-size: 14px; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }

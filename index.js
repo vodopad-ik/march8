@@ -4,9 +4,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const envelope = document.getElementById('envelope');
     const container = document.querySelector('.container');
 
-    // Звуковой эффект (используем публичный URL для примера)
-    const openSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
-    openSound.volume = 0.5;
+    // --- ТЮНИНГ ЗВУКА (Web Audio API для нулевой задержки) ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const sounds = {};
+
+    async function loadSound(name, url) {
+        try {
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+            const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+            sounds[name] = audioBuffer;
+        } catch (e) {
+            console.error('Ошибка загрузки звука:', name, e);
+        }
+    }
+
+    // Предзагрузка всех звуков
+    loadSound('open', 'sounds/open.mp3');
+    loadSound('close', 'sounds/close.mp3');
+    loadSound('firework', 'sounds/fejerverk.mp3');
+
+    function playSfx(name) {
+        if (!sounds[name]) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const source = audioCtx.createBufferSource();
+        source.buffer = sounds[name];
+        source.connect(audioCtx.destination);
+        source.start(0);
+    }
 
     let hasFiredSalute = false;
 
@@ -15,10 +40,16 @@ document.addEventListener('DOMContentLoaded', () => {
         envelope.classList.toggle('open');
 
         if (!isOpen) {
-            openSound.play().catch(e => console.log('Audio play failed:', e));
+            // Звук открытия с задержкой 400мс
+            setTimeout(() => {
+                playSfx('open');
+            }, 400);
 
             // Запуск салюта при первом открытии
             if (!hasFiredSalute && window.confetti) {
+                // Мгновенный звук салюта
+                playSfx('firework');
+
                 const count = 200;
                 const defaults = {
                     origin: { y: 0.7 },
@@ -40,10 +71,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 hasFiredSalute = true;
             }
+        } else {
+            // Мгновенный звук закрытия
+            playSfx('close');
         }
 
-        if (window.navigator.vibrate) {
-            window.navigator.vibrate(20);
+        // Вибрация (Haptic feedback)
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+            // Для Telegram используем нативный HapticFeedback
+            window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+        } else if (window.navigator.vibrate) {
+            // Обычная вибрация для браузеров
+            window.navigator.vibrate([30, 50, 30]);
         }
     });
 
