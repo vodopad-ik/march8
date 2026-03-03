@@ -39,9 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const isOpen = envelope.classList.contains('open');
         envelope.classList.toggle('open');
 
-        // Сбрасываем трансформацию (наклон), чтобы конверт был ровным при открытии
-        envelope.style.transform = '';
-
         if (!isOpen) {
             // Звук открытия с задержкой 300мс, чтобы совпало с движением клапана
             setTimeout(() => {
