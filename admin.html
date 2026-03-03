@@ -117,9 +117,8 @@
             if (text) url.searchParams.set('text', text);
             if (photo) url.searchParams.set('photo', photo);
 
-            // Ensure we point to index.html of the site and add a cache‑busting timestamp
-            const timestamp = Date.now();
-            const finalUrl = `${url.origin}${url.pathname}index.html?${url.searchParams.toString()}&v=${timestamp}`;
+            // Ensure we point to index.html of the site
+            const finalUrl = `${url.origin}${url.pathname}index.html?${url.searchParams.toString()}`;
 
             document.getElementById('resultContainer').style.display = 'block';
             document.getElementById('finalLink').innerText = finalUrl;
