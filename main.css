@@ -220,3 +220,29 @@ body {
         opacity: 1;
     }
 }
+
+/* ===== АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ ===== */
+
+/* Планшеты и небольшие экраны */
+@media (max-width: 500px) {
+    .container {
+        transform: scale(0.85);
+        transform-origin: center center;
+    }
+}
+
+/* Маленькие смартфоны */
+@media (max-width: 400px) {
+    .container {
+        transform: scale(0.72);
+        transform-origin: center center;
+    }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 340px) {
+    .container {
+        transform: scale(0.62);
+        transform-origin: center center;
+    }
+}
