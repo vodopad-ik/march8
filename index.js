@@ -118,13 +118,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Поддержка Telegram startapp параметров
     let tgParams = {};
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.start_param) {
-        const startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
-        // Предполагаем формат key1_val1-key2_val2
-        startParam.split('-').forEach(p => {
-            const [key, val] = p.split('_');
-            if (key && val) tgParams[key] = decodeURIComponent(val);
-        });
+    try {
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.start_param) {
+            const startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
+            // Разделяем параметры по дефису
+            startParam.split('-').forEach(p => {
+                const parts = p.split('_');
+                if (parts.length >= 2) {
+                    const key = parts[0];
+                    const val = parts.slice(1).join('_'); // соединяем обратно, если в значении были подчеркивания
+                    tgParams[key] = decodeURIComponent(val);
+                }
+            });
+        }
+    } catch (e) {
+        console.error("Ошибка парсинга параметров Telegram:", e);
     }
 
     const name = tgParams.name || params.get('name') || '';
