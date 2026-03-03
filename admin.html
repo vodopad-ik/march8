@@ -120,12 +120,18 @@
             const directUrl = `${url.origin}${url.pathname}index.html?${url.searchParams.toString()}`;
 
             // 2. Ссылка для Bot (через startapp)
-            // Формируем строку параметров и кодируем в Base64 (Телеграм требует именно такой формат для startapp)
             const paramString = url.searchParams.toString();
-            const base64Params = btoa(paramString).replace(/=/g, ''); // Удаляем padding для чистоты Telegram URL
 
-            const botUsername = "super_flowers_8_bot"; // Твой бот
+            // КОРРЕКТНОЕ КОДИРОВАНИЕ UNICODE ДЛЯ BASE64
+            // Стандартный btoa() не умеет работать с кириллицей напрямую
+            const base64Params = btoa(encodeURIComponent(paramString).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+                return String.fromCharCode('0x' + p1);
+            })).replace(/=/g, '');
+
+            const botUsername = "super_flowers_8_bot";
             const botUrl = `https://t.me/${botUsername}/gift?startapp=${base64Params}`;
+
+            const isTooLong = botUrl.length > 512;
 
             document.getElementById('resultContainer').style.display = 'block';
             document.getElementById('finalLink').innerHTML = `
@@ -135,7 +141,8 @@
                 </div>
                 <div>
                     <strong>Ссылка для БОТА (пересылай человеку):</strong><br>
-                    <span style="color:#d81b60; font-weight:bold;">${botUrl}</span>
+                    <span style="color:${isTooLong ? 'red' : '#d81b60'}; font-weight:bold;">${botUrl}</span>
+                    ${isTooLong ? `<br><small style="color:red;">⚠️ Внимание: Текст слишком длинный (больше 512 симв). Телеграм может не открыть эту ссылку через бота. Сократи текст или используй ссылку для браузера выше.</small>` : ''}
                 </div>
             `;
 

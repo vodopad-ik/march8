@@ -127,8 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Пытаемся взять данные из Telegram start_param (для бота)
     if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.start_param) {
         try {
-            // Декодируем из Base64 (Телеграм передает данные через startapp именно так для надежности)
-            const decodedData = atob(window.Telegram.WebApp.initDataUnsafe.start_param);
+            // Декодируем из Base64 с поддержкой Unicode
+            const base64 = window.Telegram.WebApp.initDataUnsafe.start_param;
+            const decodedData = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
             const tgParams = new URLSearchParams(decodedData);
 
             if (tgParams.get('name')) name = tgParams.get('name');
