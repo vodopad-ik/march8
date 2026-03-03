@@ -39,6 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const isOpen = envelope.classList.contains('open');
         envelope.classList.toggle('open');
 
+        // Сбрасываем трансформацию (наклон), чтобы конверт был ровным при открытии
+        envelope.style.transform = '';
+
         if (!isOpen) {
             // Звук открытия с задержкой 300мс, чтобы совпало с движением клапана
             setTimeout(() => {
@@ -115,29 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ДИНАМИЧЕСКИЙ ТЕКСТ (УНИКАЛИЗАЦИЯ) ---
     const params = new URLSearchParams(window.location.search);
-
-    // Поддержка Telegram startapp параметров
-    let tgParams = {};
-    try {
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.start_param) {
-            const startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
-            // Разделяем параметры по дефису
-            startParam.split('-').forEach(p => {
-                const parts = p.split('_');
-                if (parts.length >= 2) {
-                    const key = parts[0];
-                    const val = parts.slice(1).join('_'); // соединяем обратно, если в значении были подчеркивания
-                    tgParams[key] = decodeURIComponent(val);
-                }
-            });
-        }
-    } catch (e) {
-        console.error("Ошибка парсинга параметров Telegram:", e);
-    }
-
-    const name = tgParams.name || params.get('name') || '';
-    const text = tgParams.text || params.get('text');
-    const photo = tgParams.photo || params.get('photo');
+    const name = params.get('name') || '';
+    const text = params.get('text');
+    const photo = params.get('photo');
 
     if (name) {
         document.getElementById('user-name').innerText = name;

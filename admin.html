@@ -83,12 +83,6 @@
         <input type="text" id="baseUrl" value="https://vodopad-ik.github.io/march8/"
             placeholder="Вставь ссылку на GitHub Pages">
 
-        <label>Юзернейм бота (без @):</label>
-        <input type="text" id="botUsername" value="super_flowers_8_bot" placeholder="Например: my_march8_bot">
-
-        <label>Короткое имя Web App (из BotFather):</label>
-        <input type="text" id="appShortName" value="gift" placeholder="Например: congrats">
-
         <label>Имя девушки:</label>
         <input type="text" id="name" placeholder="Например: Катя">
 
@@ -98,19 +92,12 @@
         <label>Имя файла фото (в папке /photos):</label>
         <input type="text" id="photo" placeholder="Например: kate.jpg">
 
-        <button onclick="generateLink()">Сгенерировать ссылки</button>
+        <button onclick="generateLink()">Сгенерировать ссылку</button>
 
         <div class="result" id="resultContainer" style="display:none;">
-            <strong>1. Прямая ссылка (для браузера):</strong>
-            <div id="finalLink" style="margin-top:10px; color: #d81b60; font-size: 11px;"></div>
-
-            <strong style="display:block; margin-top:15px;">2. Telegram Web App ссылка (нативное окно):</strong>
-            <div id="tgLink" style="margin-top:10px; color: #0088cc; font-size: 11px; font-weight: bold;"></div>
-
-            <button onclick="copyTgLink()" style="margin-top:15px; background: #0088cc;">Копировать Telegram
-                ссылку</button>
-            <button onclick="copyLink()"
-                style="margin-top:10px; font-size: 12px; padding: 8px; background: #eee; color: #333;">Копировать прямую
+            <strong>Твоя ссылка для Telegram:</strong>
+            <div id="finalLink" style="margin-top:10px; color: #d81b60;"></div>
+            <button onclick="copyLink()" style="margin-top:10px; font-size: 12px; padding: 8px;">Копировать
                 ссылку</button>
         </div>
     </div>
@@ -120,46 +107,27 @@
             let base = document.getElementById('baseUrl').value.trim();
             if (!base.endsWith('/')) base += '/';
 
-            const botUsername = document.getElementById('botUsername').value.trim().replace(/\s+/g, '');
-            const appShortName = document.getElementById('appShortName').value.trim().replace(/\s+/g, '');
-            const name = document.getElementById('name').value.trim();
-            const text = document.getElementById('text').value.trim();
-            const photo = document.getElementById('photo').value.trim();
+            const name = document.getElementById('name').value;
+            const text = document.getElementById('text').value;
+            const photo = document.getElementById('photo').value;
 
-            // 1. Прямая ссылка
+            // Build URL object for proper encoding
             const url = new URL(base);
             if (name) url.searchParams.set('name', name);
             if (text) url.searchParams.set('text', text);
             if (photo) url.searchParams.set('photo', photo);
+
+            // Ensure we point to index.html of the site
             const finalUrl = `${url.origin}${url.pathname}index.html?${url.searchParams.toString()}`;
-
-            // 2. Telegram ссылка
-            let tgUrl = "Заполни юзернейм бота и имя приложения";
-            if (botUsername && appShortName) {
-                let startAppParams = [];
-                if (name) startAppParams.push(`name_${encodeURIComponent(name)}`);
-                if (text) startAppParams.push(`text_${encodeURIComponent(text)}`);
-                if (photo) startAppParams.push(`photo_${encodeURIComponent(photo)}`);
-
-                const startParam = startAppParams.join('-');
-                tgUrl = `https://t.me/${botUsername}/${appShortName}${startParam ? '?startapp=' + startParam : ''}`;
-            }
 
             document.getElementById('resultContainer').style.display = 'block';
             document.getElementById('finalLink').innerText = finalUrl;
-            document.getElementById('tgLink').innerText = tgUrl;
         }
 
         function copyLink() {
             const link = document.getElementById('finalLink').innerText;
             navigator.clipboard.writeText(link);
-            alert('Прямая ссылка скопирована!');
-        }
-
-        function copyTgLink() {
-            const link = document.getElementById('tgLink').innerText;
-            navigator.clipboard.writeText(link);
-            alert('Telegram ссылка скопирована!');
+            alert('Ссылка скопирована!');
         }
     </script>
 </body>

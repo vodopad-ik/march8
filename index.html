@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>С 8 Марта!</title>
-  <link rel="stylesheet" href="main.css?v=3">
+  <link rel="stylesheet" href="main.css?v=4">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@300;400;600&display=swap"
@@ -13,14 +13,12 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
-    (function () {
-      if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-        tg.setHeaderColor('#fff5f8');
-      }
-    })();
+    if (window.Telegram && window.Telegram.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
+      tg.setHeaderColor('#fff5f8');
+    }
   </script>
 </head>
 
@@ -33,22 +31,24 @@
   </div>
 
   <div class="container">
-    <div class="envelope-wrapper" id="envelope">
-      <div class="envelope">
-        <div class="back-space"></div>
-        <div class="letter">
-          <div class="letter-content">
-            <div id="recipient-photo" class="photo-container"></div>
-            <h1 id="greeting-title">С 8 Марта, <span id="user-name">!</span> 🌷</h1>
-            <p id="user-text">Пусть этот весенний день наполнит твое сердце теплом, нежностью и радостью. Ты
-              вдохновляешь и делаешь этот мир прекраснее!</p>
-            <p class="signature">С любовью...</p>
+    <div class="envelope-scaler">
+      <div class="envelope-wrapper" id="envelope">
+        <div class="envelope">
+          <div class="back-space"></div>
+          <div class="letter">
+            <div class="letter-content">
+              <div id="recipient-photo" class="photo-container"></div>
+              <h1 id="greeting-title">С 8 Марта, <span id="user-name">!</span> 🌷</h1>
+              <p id="user-text">Пусть этот весенний день наполнит твое сердце теплом, нежностью и радостью. Ты
+                вдохновляешь и делаешь этот мир прекраснее!</p>
+              <p class="signature">С любовью...</p>
+            </div>
           </div>
+          <div class="front-pocket"></div>
+          <div class="top-flap"></div>
         </div>
-        <div class="front-pocket"></div>
-        <div class="top-flap"></div>
+        <div class="instruction">Нажми, чтобы открыть</div>
       </div>
-      <div class="instruction">Нажми, чтобы открыть</div>
     </div>
   </div>
 
